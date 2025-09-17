@@ -102,7 +102,7 @@ def modificar(id_tarea):
         cursor.execute("UPDATE tareas SET descripcion = %s WHERE id_tarea = %s", 
                        (descripcion, id_tarea))
         cursor.connection.commit()
-        return jsonify({"mensaje":"Datos actualizados correctamenet"}),200
+        return jsonify({"mensaje":"Datos actualizados"}),200
     except Exception as e:
         return jsonify({"error":f"Error al actualizar los datos: {str(e)}"})
     finally:
