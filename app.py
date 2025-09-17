@@ -4,23 +4,23 @@ from dotenv import load_dotenv
 from config.db import init_db, mysql
 from flask_jwt_extended import JWTManager
 
-# Importamos las rutas de los blueprint
+#Importamos las rutas de los blueprint
 from routes.tareas import tareas_bp
 from routes.usuarios import usuarios_bp
 
-# Cargar las variables de entorno
+#Cargar las variables de entorno
 load_dotenv()
 
 
-def create_app():  # <-Funcion para crear la app
+def create_app():  #Funcion para crear la app
 
-    # Instancia de la app
+    #Instancia de la app
     app = Flask(__name__)
 
-    # Configurar la base de datos
+    #Configurar la base de datos
     init_db(app)
 
-    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET')
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     jwt = JWTManager(app)
 
     #Registrar el blueprint
@@ -30,7 +30,7 @@ def create_app():  # <-Funcion para crear la app
     return app
 
 
-# Crear la app
+#Crear la app
 app = create_app()
 
 if __name__ == "__main__":

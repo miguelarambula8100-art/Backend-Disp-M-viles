@@ -2,10 +2,10 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from config.db import get_db_connection
 
-# Crear el blueprint
+#Creamos el blueprint
 tareas_bp = Blueprint('tareas', __name__)
 
-# Crear un endpoint obtener tareas
+#Crear endpoint con GET
 @tareas_bp.route('/obtener', methods=['GET'])
 @jwt_required()
 def get():
@@ -72,7 +72,7 @@ def crear():
 @jwt_required()
 def modificar(id_tarea):
 
-    # Obtenemos la identidad del dueño de la tarea
+    #Obtener la identidad del dueño del token
     current_user = get_jwt_identity()
 
     # Obtenemos los datos del body
@@ -82,23 +82,22 @@ def modificar(id_tarea):
 
     cursor = get_db_connection()
 
-    # Verificamos si existe la tarea
+    # Verificamos que la tarea exista
     query = "SELECT * FROM tareas WHERE id_tarea = %s"
     cursor.execute(query, (id_tarea,))
     tarea = cursor.fetchone()
-    #tarea = (1,2, .... n)
-
-    # Verificamos que la tarea exista
+    
+    # 
     if not tarea:
         cursor.close()
         return jsonify({"error":"Esa tarea no existe"}), 404
     
-    # Verificamos que la tarea pertenezca al usuario logueado
+    # Verificamos que la tarea pertenezca al usuario
     if not tarea[1] == int(current_user):
         cursor.close()
         return jsonify({"error": "Credenciales Incorrectas"}), 401
     
-    # Actualizar los datos
+    # Actualizamos la tarea
     try:
         cursor.execute("UPDATE tareas SET descripcion = %s WHERE id_tarea = %s", 
                        (descripcion, id_tarea))
@@ -108,5 +107,3 @@ def modificar(id_tarea):
         return jsonify({"error":f"Error al actualizar los datos: {str(e)}"})
     finally:
         cursor.close()
-        
-
